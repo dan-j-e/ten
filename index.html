@@ -1,22 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>10 Months Map</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <div id="map">
 
-    <!--
-      Smooth Catmull-Rom heart path through all 10 node centres:
-        1(400,270)  2(490,190)  3(580,265)  4(555,400)  5(470,510)
-        6(400,580)  7(330,510)  8(245,400)  9(220,265) 10(310,190)
-    -->
     <svg id="roads" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;">
 
-      <!-- Perimeter road — border -->
-      <path fill="none" stroke="#9e7f56" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"
+      <!-- Island: sandy beach base -->
+      <path fill="#e8c26a"
         d="M 400 270
            C 430 270, 460 191, 490 190
            C 520 189, 569 230, 580 265
@@ -29,8 +26,9 @@
            C 231 230, 280 189, 310 190
            C 340 191, 370 270, 400 270 Z"/>
 
-      <!-- Perimeter road — surface -->
-      <path fill="none" stroke="#d4b87a" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"
+      <!-- Island: grass interior (scaled to 82% from visual centre) -->
+      <path fill="#5aaa35"
+        transform="translate(400,385) scale(0.82) translate(-400,-385)"
         d="M 400 270
            C 430 270, 460 191, 490 190
            C 520 189, 569 230, 580 265
@@ -43,8 +41,8 @@
            C 231 230, 280 189, 310 190
            C 340 191, 370 270, 400 270 Z"/>
 
-      <!-- Perimeter road — dashes -->
-      <path fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-dasharray="10,8" stroke-linecap="round"
+      <!-- Coastline outline -->
+      <path fill="none" stroke="#2a5a10" stroke-width="4" stroke-linejoin="round"
         d="M 400 270
            C 430 270, 460 191, 490 190
            C 520 189, 569 230, 580 265
@@ -57,37 +55,56 @@
            C 231 230, 280 189, 310 190
            C 340 191, 370 270, 400 270 Z"/>
 
-      <!-- Centre spoke — border -->
-      <line x1="400" y1="403" x2="400" y2="270" stroke="#9e7f56" stroke-width="14" stroke-linecap="round"/>
-      <!-- Centre spoke — surface -->
-      <line x1="400" y1="403" x2="400" y2="270" stroke="#d4b87a" stroke-width="9" stroke-linecap="round"/>
-      <!-- Centre spoke — dashes -->
-      <line x1="400" y1="403" x2="400" y2="270" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-dasharray="10,8" stroke-linecap="round"/>
+      <!-- Roads: red dotted trail -->
+      <path fill="none" stroke="#cc1111" stroke-width="2.5" stroke-dasharray="3,9" stroke-linecap="round"
+        d="M 400 270
+           C 430 270, 460 191, 490 190
+           C 520 189, 569 230, 580 265
+           C 591 300, 573 359, 555 400
+           C 537 441, 496 480, 470 510
+           C 444 540, 420 580, 400 580
+           C 380 580, 356 540, 330 510
+           C 304 480, 263 441, 245 400
+           C 227 359, 209 300, 220 265
+           C 231 230, 280 189, 310 190
+           C 340 191, 370 270, 400 270 Z"/>
+
+      <!-- Centre spoke: red dotted -->
+      <line x1="400" y1="403" x2="400" y2="270"
+        stroke="#cc1111" stroke-width="2.5" stroke-dasharray="3,9" stroke-linecap="round"/>
 
     </svg>
 
-    <!-- Heart perimeter nodes -->
-    <div class="node" style="top:250px; left:380px;" data-title="Month 1">1</div>
-    <div class="node" style="top:170px; left:470px;" data-title="Month 2">2</div>
-    <div class="node" style="top:245px; left:560px;" data-title="Month 3">3</div>
-    <div class="node" style="top:380px; left:535px;" data-title="Month 4">4</div>
-    <div class="node" style="top:490px; left:450px;" data-title="Month 5">5</div>
-    <div class="node" style="top:560px; left:380px;" data-title="Month 6">6</div>
-    <div class="node" style="top:490px; left:310px;" data-title="Month 7">7</div>
-    <div class="node" style="top:380px; left:225px;" data-title="Month 8">8</div>
-    <div class="node" style="top:245px; left:200px;" data-title="Month 9">9</div>
-    <div class="node" style="top:170px; left:290px;" data-title="Month 10">10</div>
+    <!-- Heart perimeter nodes — sand castles -->
+    <div class="node" style="top:247px; left:377px;" data-title="Month 1">🏰</div>
+    <div class="node" style="top:167px; left:467px;" data-title="Month 2">🏰</div>
+    <div class="node" style="top:242px; left:557px;" data-title="Month 3">🏰</div>
+    <div class="node" style="top:377px; left:532px;" data-title="Month 4">🏰</div>
+    <div class="node" style="top:487px; left:447px;" data-title="Month 5">🏰</div>
+    <div class="node" style="top:557px; left:377px;" data-title="Month 6">🏰</div>
+    <div class="node" style="top:487px; left:307px;" data-title="Month 7">🏰</div>
+    <div class="node" style="top:377px; left:222px;" data-title="Month 8">🏰</div>
+    <div class="node" style="top:242px; left:197px;" data-title="Month 9">🏰</div>
+    <div class="node" style="top:167px; left:287px;" data-title="Month 10">🏰</div>
 
-    <!-- Center node -->
-    <div class="node node-center" style="top:383px; left:380px; background:#ff6b6b; color:#fff; font-size:18px;" data-title="Center">&#9829;</div>
+    <!-- Centre node — anchor / home -->
+    <div class="node" style="top:380px; left:377px;" data-title="Center">⚓</div>
 
     <div id="car"></div>
 
   </div>
 
   <div id="popup" class="hidden">
-    <h2 id="popupTitle"></h2>
-    <button onclick="closePopup()">Close</button>
+    <button id="popup-close" onclick="closePopup()">✕</button>
+    <div class="polaroid-photo">📷</div>
+    <div class="polaroid-caption">
+      <div class="polaroid-month" id="popup-title"></div>
+      <div class="polaroid-note" id="popup-note"></div>
+      <div class="polaroid-player">
+        <button class="play-btn" id="play-btn" onclick="toggleAudio()">♪ play</button>
+        <audio id="popup-audio"></audio>
+      </div>
+    </div>
   </div>
 
   <script src="script.js"></script>

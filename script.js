@@ -1,7 +1,6 @@
 const car = document.getElementById("car");
 const nodes = document.querySelectorAll(".node");
 
-// Center of each node (left+20, top+20 since nodes are 40x40)
 const nodePositions = {
   '1':      { x: 400, y: 270 },
   '2':      { x: 490, y: 190 },
@@ -16,7 +15,21 @@ const nodePositions = {
   'center': { x: 400, y: 403 }
 };
 
-// Clockwise-first adjacency so BFS prefers the shorter clockwise route
+// HTML entities used for all non-ASCII so encoding never matters
+const nodeData = {
+  '1':      { title: 'Month 1',   note: 'Our story begins here. &#10024;',         audio: 'audio/month1.mp3'  },
+  '2':      { title: 'Month 2',   note: 'Something new every single day.',          audio: 'audio/month2.mp3'  },
+  '3':      { title: 'Month 3',   note: 'Getting closer, little by little.',        audio: 'audio/month3.mp3'  },
+  '4':      { title: 'Month 4',   note: 'I knew I was in trouble.',                 audio: 'audio/month4.mp3'  },
+  '5':      { title: 'Month 5',   note: 'Halfway, and already full.',               audio: 'audio/month5.mp3'  },
+  '6':      { title: 'Month 6',   note: 'The most perfect ordinary day.',           audio: 'audio/month6.mp3'  },
+  '7':      { title: 'Month 7',   note: 'Learning all your little things.',         audio: 'audio/month7.mp3'  },
+  '8':      { title: 'Month 8',   note: 'Still in awe of you.',                    audio: 'audio/month8.mp3'  },
+  '9':      { title: 'Month 9',   note: 'Almost there &mdash; not ready to stop.', audio: 'audio/month9.mp3'  },
+  '10':     { title: 'Month 10',  note: 'Ten months. Here we are. &#9825;',        audio: 'audio/month10.mp3' },
+  'center': { title: '&#9825;',   note: 'Home. Where it all started.',             audio: 'audio/home.mp3'    },
+};
+
 const adjacency = {
   '1':      ['2', '10', 'center'],
   '2':      ['3', '1'],
@@ -63,10 +76,8 @@ function placeCar(nodeId) {
 let currentNodeId = 'center';
 let isMoving = false;
 
-// Start at center, no transition on initial placement
 car.style.transition = 'none';
 placeCar('center');
-// Re-enable transition after placement
 requestAnimationFrame(() => {
   requestAnimationFrame(() => {
     car.style.transition = 'left 0.9s linear, top 0.9s linear';
@@ -78,23 +89,21 @@ nodes.forEach(node => {
     if (isMoving) return;
     const targetId = nodeIdFromTitle(node.dataset.title);
     if (targetId === currentNodeId) return;
-
     const path = findPath(currentNodeId, targetId);
     if (!path) return;
-
     currentNodeId = targetId;
-    driveAlongPath(path, node.dataset.title);
+    driveAlongPath(path);
   });
 });
 
-function driveAlongPath(path, finalTitle) {
+function driveAlongPath(path) {
   isMoving = true;
   let step = 1;
 
   function moveNext() {
     if (step >= path.length) {
       isMoving = false;
-      showPopup(finalTitle);
+      showPopup(currentNodeId);
       return;
     }
     placeCar(path[step]);
@@ -105,11 +114,35 @@ function driveAlongPath(path, finalTitle) {
   moveNext();
 }
 
-function showPopup(title) {
-  document.getElementById("popupTitle").innerText = title;
-  document.getElementById("popup").classList.remove("hidden");
+function showPopup(nodeId) {
+  const data = nodeData[nodeId] || {};
+  document.getElementById('popup-title').innerHTML = data.title || nodeId;
+  document.getElementById('popup-note').innerHTML  = data.note  || '...';
+
+  const audio = document.getElementById('popup-audio');
+  audio.src = data.audio || '';
+  audio.load();
+
+  document.getElementById('play-btn').innerHTML = '&#9834; play';
+  document.getElementById('popup').classList.remove('hidden');
 }
 
 function closePopup() {
-  document.getElementById("popup").classList.add("hidden");
+  const audio = document.getElementById('popup-audio');
+  audio.pause();
+  audio.currentTime = 0;
+  document.getElementById('play-btn').innerHTML = '&#9834; play';
+  document.getElementById('popup').classList.add('hidden');
+}
+
+function toggleAudio() {
+  const audio = document.getElementById('popup-audio');
+  const btn   = document.getElementById('play-btn');
+  if (audio.paused) {
+    audio.play().catch(() => {});
+    btn.innerHTML = '&#9208; pause';
+  } else {
+    audio.pause();
+    btn.innerHTML = '&#9834; play';
+  }
 }
