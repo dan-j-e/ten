@@ -1,27 +1,108 @@
 const car = document.getElementById("car");
 const nodes = document.querySelectorAll(".node");
 
-let currentX = 50;
-let currentY = 50;
+// Center of each node (left+20, top+20 since nodes are 40x40)
+const nodePositions = {
+  '1':      { x: 400, y: 320 },
+  '2':      { x: 435, y: 265 },
+  '3':      { x: 540, y: 275 },
+  '4':      { x: 540, y: 390 },
+  '5':      { x: 435, y: 490 },
+  '6':      { x: 400, y: 540 },
+  '7':      { x: 365, y: 490 },
+  '8':      { x: 260, y: 390 },
+  '9':      { x: 260, y: 275 },
+  '10':     { x: 365, y: 265 },
+  'center': { x: 400, y: 403 }
+};
 
-nodes.forEach(node => {
-  node.addEventListener("click", () => {
-    const rect = node.getBoundingClientRect();
+// Clockwise-first adjacency so BFS prefers the shorter clockwise route
+const adjacency = {
+  '1':      ['2', '10', 'center'],
+  '2':      ['3', '1'],
+  '3':      ['4', '2'],
+  '4':      ['5', '3'],
+  '5':      ['6', '4'],
+  '6':      ['7', '5'],
+  '7':      ['8', '6'],
+  '8':      ['9', '7'],
+  '9':      ['10', '8'],
+  '10':     ['1', '9'],
+  'center': ['1']
+};
 
-    const targetX = rect.left;
-    const targetY = rect.top;
+function nodeIdFromTitle(title) {
+  if (title === 'Center') return 'center';
+  return title.replace('Month ', '');
+}
 
-    moveCar(targetX, targetY, node.dataset.title);
+function findPath(from, to) {
+  if (from === to) return [from];
+  const queue = [[from, [from]]];
+  const visited = new Set([from]);
+  while (queue.length > 0) {
+    const [node, path] = queue.shift();
+    for (const neighbor of adjacency[node]) {
+      if (!visited.has(neighbor)) {
+        const newPath = [...path, neighbor];
+        if (neighbor === to) return newPath;
+        visited.add(neighbor);
+        queue.push([neighbor, newPath]);
+      }
+    }
+  }
+  return null;
+}
+
+function placeCar(nodeId) {
+  const pos = nodePositions[nodeId];
+  car.style.left = (pos.x - 10) + 'px';
+  car.style.top  = (pos.y - 10) + 'px';
+}
+
+let currentNodeId = 'center';
+let isMoving = false;
+
+// Start at center, no transition on initial placement
+car.style.transition = 'none';
+placeCar('center');
+// Re-enable transition after placement
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    car.style.transition = 'left 0.9s linear, top 0.9s linear';
   });
 });
 
-function moveCar(x, y, title) {
-  car.style.left = x + "px";
-  car.style.top = y + "px";
+nodes.forEach(node => {
+  node.addEventListener("click", () => {
+    if (isMoving) return;
+    const targetId = nodeIdFromTitle(node.dataset.title);
+    if (targetId === currentNodeId) return;
 
-  setTimeout(() => {
-    showPopup(title);
-  }, 1000);
+    const path = findPath(currentNodeId, targetId);
+    if (!path) return;
+
+    currentNodeId = targetId;
+    driveAlongPath(path, node.dataset.title);
+  });
+});
+
+function driveAlongPath(path, finalTitle) {
+  isMoving = true;
+  let step = 1;
+
+  function moveNext() {
+    if (step >= path.length) {
+      isMoving = false;
+      showPopup(finalTitle);
+      return;
+    }
+    placeCar(path[step]);
+    step++;
+    setTimeout(moveNext, 950);
+  }
+
+  moveNext();
 }
 
 function showPopup(title) {
