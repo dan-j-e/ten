@@ -4,15 +4,15 @@ const nodes = document.querySelectorAll(".node");
 // Center of each node (left+20, top+20 since nodes are 40x40)
 const nodePositions = {
   '1':      { x: 400, y: 320 },
-  '2':      { x: 435, y: 265 },
+  '2':      { x: 435, y: 235 },
   '3':      { x: 540, y: 275 },
   '4':      { x: 540, y: 390 },
-  '5':      { x: 435, y: 490 },
+  '5':      { x: 460, y: 475 },
   '6':      { x: 400, y: 540 },
-  '7':      { x: 365, y: 490 },
+  '7':      { x: 340, y: 475 },
   '8':      { x: 260, y: 390 },
   '9':      { x: 260, y: 275 },
-  '10':     { x: 365, y: 265 },
+  '10':     { x: 365, y: 235 },
   'center': { x: 400, y: 403 }
 };
 
