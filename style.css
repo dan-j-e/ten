@@ -23,6 +23,12 @@ body {
   cursor: pointer;
 }
 
+.node-center {
+  background: #ff6b6b;
+  font-size: 18px;
+  color: #fff;
+}
+
 #car {
   width: 20px;
   height: 20px;
